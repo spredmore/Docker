@@ -7,6 +7,9 @@ sed -e '/MAXOPENFILES=8192/ s/^#*/#/' -i /etc/default/jenkins
 # Start Jenkins
 service jenkins start
 
+# Set the Selenium directory and its subfolders to be writable so Jenkins can write to them.
+chmod a+w -R /Selenium/
+
 # Begin idling
 
 echo "This is an idle script (infinite loop) to keep the container running"
@@ -24,4 +27,3 @@ do
 	sleep 60 &
 	wait $!
 done
-

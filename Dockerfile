@@ -1,3 +1,9 @@
+FROM ubuntu:16.04
+
+# Set DEBIAN_FRONTEND to prevent apt-util errors
+ENV DEBIAN_FRONTEND noninteractive
+
+# Set policy-rc.d to allow services to start during package installations.
 RUN echo exit 0 > /usr/sbin/policy-rc.d
 
 # Install dependencies
@@ -31,10 +37,6 @@ RUN apt-get -y install unzip
 # Install TestNG
 RUN apt-get -y install testng
 
-# Install xvfb
-# May not be needed, since I should be able to run Chrome with --headless
-#RUN apt-get -y install xvfb
-
 # Install Jenkins
 RUN wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
 RUN sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
@@ -64,6 +66,9 @@ COPY ./setup.sh /
 
 # TEMPORARY TEST: Copy ChromeHeadlessTest.java from the EC2 instance into the Docker container
 COPY ./ChromeHeadlessTest.java /
+
+# Copy the Selenium folder from the EC2 instance to the Docker Container.
+COPY Selenium /Selenium
 
 EXPOSE 8080
 
